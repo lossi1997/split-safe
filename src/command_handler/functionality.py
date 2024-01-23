@@ -3,5 +3,5 @@
 def init(args):
     print("juubelis")
 
-def a(args):
+def commit(args):
     print("jasdasd")
