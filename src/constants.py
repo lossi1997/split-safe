@@ -1,5 +1,5 @@
 
-from .functionality import *
+from commands import *
 
 SUBCOMMANDS = {
     "init": {"help": "help init test", "func": init},

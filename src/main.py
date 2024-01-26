@@ -2,7 +2,7 @@
 import argparse
 from argparse import Namespace, ArgumentParser
 
-import command_handler as cmdh
+import commands, constants
 
 class Main:
     parser: ArgumentParser
@@ -17,7 +17,7 @@ class Main:
         self.args.func(self.args)
 
     def __conf_parsers(self) -> None:
-        for cmd, config in cmdh.SUBCOMMANDS.items():
+        for cmd, config in constants.SUBCOMMANDS.items():
             subparser = self.subparsers.add_parser(cmd, help=config["help"])
             subparser.set_defaults(func=config["func"])
             if "args" in config or "kwargs" in config:

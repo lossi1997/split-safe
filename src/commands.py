@@ -1,7 +1,8 @@
 
+import configure
 
 def init(args):
-    print("juubelis")
+    configure.Config()
 
 def commit(args):
     print("jasdasd")
