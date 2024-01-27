@@ -4,9 +4,9 @@ DEFAULT_CONFIG = {
         "AUTOSAVE": "false"
     },
     "ACTIVE_DRIVES": {
-        "DRIVENAME": "false"
+        "DRIVENAME": "foo"
     },
     "PATHS": {
-        "FILENAME": "none"
+        "FILENAME": "foo"
     }
 }

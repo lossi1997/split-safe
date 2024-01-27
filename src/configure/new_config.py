@@ -2,7 +2,7 @@
 import configparser
 import os
 
-from .constants import DEFAULT_CONFIG as DC
+from .const import DEFAULT_CONFIG as DC
 
 
 class Config(configparser.ConfigParser):
