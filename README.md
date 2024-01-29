@@ -5,8 +5,6 @@ Do not try to use it yet unless you know exactly what you are doing!
 ---
 
 # split-safe
-
---- 
 A file backup CLI tool for small amount of important files to eliminate the need for an additional backup device or 
 cloud service.
 
