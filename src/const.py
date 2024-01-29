@@ -3,5 +3,6 @@ from commands import *
 
 SUBCOMMANDS = {
     "init": {"help": "help init test", "func": init},
-    "commit": {"help": "help commit test", "func": commit}
+    "add": {"help": "help commit test", "func": add},
+    "save": {"help": "help save test", "func": save}
 }

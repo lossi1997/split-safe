@@ -1,1 +1,1 @@
-from .new_config import Config
+from .config_handling import ConfigHandler

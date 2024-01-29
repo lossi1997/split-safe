@@ -3,13 +3,13 @@ import argparse
 from argparse import Namespace, ArgumentParser
 
 import const
-
+import commands
 class Main:
     parser: ArgumentParser
     subparsers: '_SubParsersAction[_ArgumentParserT]'
     args: Namespace
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.parser = argparse.ArgumentParser(description="not implemented yet......")
         self.subparsers = self.parser.add_subparsers(dest="command", help="Available commands")
         self.__conf_parsers()
