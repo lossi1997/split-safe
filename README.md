@@ -1,4 +1,6 @@
-# !! Do not use yet, work in progress !!
+# Disclaimer!
+This project is currently not at a fully functional state and contains all kinds of bugs nor might not work at all.
+Do not try to use it yet unless you know exactly what you are doing!
 
 ---
 
@@ -13,7 +15,7 @@ It keeps track of user defined important files and distributes them to ordinary 
 In case any of the drive fails, split-safe makes sure that the important files are always already backupped on another 
 drive.
 
-### Example:
+### Example (planning):
 You have tagged ```C:/foo.txt, D/:bar.py, E:/baz.jpg``` as important files via split-safe, these files are then
 automatically copied and distributed to another drives into a ZIP archives (to reduce the size).  
 
