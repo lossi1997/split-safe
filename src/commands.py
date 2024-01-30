@@ -35,7 +35,7 @@ def save(args):
     filepaths: list[str] = []
     for drive, active in conf.settings["ACTIVE_DRIVES"].items():
         if active:
-            active_drives.append(drive.upper() + ":/")
+            active_drives.append(drive.upper() + ":")
     for path in conf.settings["PATHS"].items():
         filepaths.append(path[1])
 

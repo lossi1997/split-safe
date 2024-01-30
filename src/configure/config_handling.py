@@ -21,17 +21,18 @@ class ConfigHandler(configparser.ConfigParser):
 
         if os.path.exists(self.filepath):
             self.file_exists = True
-            self.get_data()
+            self.settings = self.get_data()
 
-    def get_data(self) -> None:
+    def get_data(self) -> dict:
         self.read(self.filepath)
+        settings: dict = self.settings
         for section in self.sections():
             for item in self.items(section):
                 try:
-                    self.settings[section][item[0]] = self.getboolean(section, item[0])
+                    settings[section][item[0]] = self.getboolean(section, item[0])
                 except ValueError:
-                    self.settings[section][item[0]] = item[1]
-        return None
+                    settings[section][item[0]] = item[1]
+        return settings
 
     def __get_drives(self) -> None:
         for i in range(65, 91):
