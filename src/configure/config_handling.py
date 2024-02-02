@@ -21,9 +21,9 @@ class ConfigHandler(configparser.ConfigParser):
 
         if os.path.exists(self.filepath):
             self.file_exists = True
-            self.settings = self.get_data()
+            self.settings = self.__get_data()
 
-    def get_data(self) -> dict:
+    def __get_data(self) -> dict:
         self.read(self.filepath)
         settings: dict = self.settings
         for section in self.sections():
@@ -34,15 +34,25 @@ class ConfigHandler(configparser.ConfigParser):
                     settings[section][item[0]] = item[1]
         return settings
 
-    def __get_drives(self) -> None:
+    def __get_existing_drives(self) -> None:
         for i in range(65, 91):
             if os.path.exists(chr(i) + ":"):
                 self.settings["ACTIVE_DRIVES"][chr(i)] = True
         return None
 
+    def get_active_drives(self) -> list[str]:
+        active_drives: list[str] = []
+        filepaths: list[str] = []
+        for drive, active in self.settings["ACTIVE_DRIVES"].items():
+            if active:
+                active_drives.append(drive.upper() + ":")
+        for path in self.settings["PATHS"].items():
+            filepaths.append(path[1])
+        return active_drives
+
     def create_file(self) -> None:
         if not self.file_exists:
-            self.__get_drives()
+            self.__get_existing_drives()
             for section, value in self.settings.items():
                 self[section] = value
             with open(self.filepath, "w") as configfile:
