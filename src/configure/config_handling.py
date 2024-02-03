@@ -12,8 +12,6 @@ class ConfigHandler(configparser.ConfigParser):
         },
         "ACTIVE_DRIVES": {
         },
-        "PATHS": {
-        }
     }
 
     def __init__(self, *args, **kwargs):
@@ -42,12 +40,9 @@ class ConfigHandler(configparser.ConfigParser):
 
     def get_active_drives(self) -> list[str]:
         active_drives: list[str] = []
-        filepaths: list[str] = []
         for drive, active in self.settings["ACTIVE_DRIVES"].items():
             if active:
                 active_drives.append(drive.upper() + ":")
-        for path in self.settings["PATHS"].items():
-            filepaths.append(path[1])
         return active_drives
 
     def create_file(self) -> None:
@@ -59,11 +54,4 @@ class ConfigHandler(configparser.ConfigParser):
                 self.write(configfile)
         return None
 
-    def add_paths(self, paths) -> None:
-        for path in paths:
-            # drive: str = path.split(":")[0]
-            filename: str = path.split(r"/")[-1]
-            self["PATHS"][filename] = path
-            with open(self.filepath, "w") as configfile:
-                self.write(configfile)
-        return None
+
