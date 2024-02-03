@@ -2,34 +2,31 @@
 import json
 import os
 
-import configure
 
-# file structure:
+# json file structure:
 # {
-#   "filename": {
-#     "orig_path": "path",
-#     "dest_path": "path"
+#   "<filename>": {
+#     "orig_path": "<path>",
+#     "dest_path": "<path>"
 #   }
 # }
 
 
 class JsonParser:
     filepath: str = "./file_metadata.json"
-    file_exists: bool = False
 
-    def __init__(self, conf: configure.ConfigHandler = None):
-        self.conf = conf
-
+    def __init__(self):
         if os.path.exists(self.filepath):
-            self.file_exists = True
             self.data = self.__get_data()
+        else:
+            self.__create_file()
 
     def __get_data(self) -> dict:
         with open(self.filepath) as f:
             json_data = json.load(f)
         return json_data
 
-    def create_file(self) -> None:
+    def __create_file(self) -> None:
         with open(self.filepath, "w") as f:
             default = json.dumps({})
             f.write(default)

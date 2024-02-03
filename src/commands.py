@@ -1,20 +1,19 @@
 
 import os
 
-import configure
+from configure import ConfigHandler
 from filehandling import Filehandler
 from metadata_parsing import JsonParser
 
 
 def init(args):
-    conf = configure.ConfigHandler()
-    conf.create_file()
-    json_parser = JsonParser()
-    json_parser.create_file()
+    ConfigHandler()
+    JsonParser()
 
 
 def add(args):
-    conf = configure.ConfigHandler()
+    conf = ConfigHandler()
+    print(conf.active_drives)
     print(conf.settings)
     paths: list[str] = []
     while True:
@@ -28,21 +27,12 @@ def add(args):
             else:
                 print("Invalid path!")
 
-    json_parser = JsonParser(conf)
+    json_parser = JsonParser()
     for path in paths:
-        dest_path = json_parser.set_dest_filepath(path, conf.get_active_drives())
+        dest_path = json_parser.set_dest_filepath(path, conf.active_drives)
         json_parser.add_path_data(path, dest_path)
 
 
 def save(args):
-    conf = configure.ConfigHandler()
-
-    # active_drives: list[str] = []
-    # filepaths: list[str] = []
-    # for drive, active in conf.settings["ACTIVE_DRIVES"].items():
-    #     if active:
-    #         active_drives.append(drive.upper() + ":")
-    # for path in conf.settings["PATHS"].items():
-    #     filepaths.append(path[1])
-
-    #fh = Filehandler(active_drives, filepaths)
+    json_parser = JsonParser()
+    fh = Filehandler(json_parser.data)

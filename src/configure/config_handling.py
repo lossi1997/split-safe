@@ -5,7 +5,7 @@ import os
 
 class ConfigHandler(configparser.ConfigParser):
     filepath: str = "./config.ini"
-    file_exists: bool = False
+    active_drives: list[str]
     settings: dict = {
         "GENERAL": {
             "autosave": False
@@ -18,8 +18,11 @@ class ConfigHandler(configparser.ConfigParser):
         super().__init__(*args, **kwargs)
 
         if os.path.exists(self.filepath):
-            self.file_exists = True
             self.settings = self.__get_data()
+        else:
+            self.__create_file()
+
+        self.active_drives = self.__get_active_drives()
 
     def __get_data(self) -> dict:
         self.read(self.filepath)
@@ -38,20 +41,20 @@ class ConfigHandler(configparser.ConfigParser):
                 self.settings["ACTIVE_DRIVES"][chr(i)] = True
         return None
 
-    def get_active_drives(self) -> list[str]:
+    def __get_active_drives(self) -> list[str]:
         active_drives: list[str] = []
         for drive, active in self.settings["ACTIVE_DRIVES"].items():
+            print(drive, active)
             if active:
                 active_drives.append(drive.upper() + ":")
         return active_drives
 
-    def create_file(self) -> None:
-        if not self.file_exists:
-            self.__get_existing_drives()
-            for section, value in self.settings.items():
-                self[section] = value
-            with open(self.filepath, "w") as configfile:
-                self.write(configfile)
+    def __create_file(self) -> None:
+        self.__get_existing_drives()
+        for section, value in self.settings.items():
+            self[section] = value
+        with open(self.filepath, "w") as configfile:
+            self.write(configfile)
         return None
 
 
