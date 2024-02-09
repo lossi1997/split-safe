@@ -41,14 +41,6 @@ class ConfigHandler(configparser.ConfigParser):
                 self.settings["ACTIVE_DRIVES"][chr(i)] = True
         return None
 
-    def __get_active_drives(self) -> list[str]:
-        active_drives: list[str] = []
-        for drive, active in self.settings["ACTIVE_DRIVES"].items():
-            print(drive, active)
-            if active:
-                active_drives.append(drive.upper() + ":")
-        return active_drives
-
     def __create_file(self) -> None:
         self.__get_existing_drives()
         for section, value in self.settings.items():
@@ -57,4 +49,10 @@ class ConfigHandler(configparser.ConfigParser):
             self.write(configfile)
         return None
 
-
+    def __get_active_drives(self) -> list[str]:
+        active_drives: list[str] = []
+        for drive, active in self.settings["ACTIVE_DRIVES"].items():
+            print(drive, active)
+            if active:
+                active_drives.append(drive.upper() + ":")
+        return active_drives

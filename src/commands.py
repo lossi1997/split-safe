@@ -35,4 +35,4 @@ def add(args):
 
 def save(args):
     json_parser = JsonParser()
-    fh = Filehandler(json_parser.data)
+    json_parser.get_filedata()
