@@ -36,4 +36,5 @@ def add(args):
 def save(args):
     json_parser = JsonParser()
     fileobjs = json_parser.get_filedata()
-    fh = Filehandler()
+    fh = Filehandler(fileobjs)
+    fh.backup()
