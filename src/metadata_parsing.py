@@ -9,7 +9,8 @@ from file_dataclass import File
 # {
 #   "<filename>": {
 #     "orig_path": "<path>",
-#     "dest_path": "<path>"
+#     "dest_path": "<path>",
+#     "modify_date": "<dd.mm.yyyy>"
 #   }
 # }
 
