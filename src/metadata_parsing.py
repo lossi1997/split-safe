@@ -18,33 +18,34 @@ from file_dataclass import File
 class JsonParser:
     filepath: str = "./file_metadata.json"
     split_dest_path: str = "/split-safe/"
+    data = dict
 
     def __init__(self):
+        self.data = self.__init__data()
+
+    def __init__data(self) -> dict:
         if os.path.exists(self.filepath):
-            self.data = self.__get_data()
+            with open(self.filepath) as f:
+                json_data = json.load(f)
         else:
-            self.__create_file()
+            with open(self.filepath, "w") as f:
+                default = json.dumps({})
+                f.write(default)
+                json_data = default
 
-    def __get_data(self) -> dict:
-        with open(self.filepath) as f:
-            json_data = json.load(f)
         return json_data
-
-    def __create_file(self) -> None:
-        with open(self.filepath, "w") as f:
-            default = json.dumps({})
-            f.write(default)
-        return None
 
     def add_path_data(self, orig_path: str, dest_path: str) -> None:
         filename = self._get_path_filename(orig_path)
         exists = self._check_existance(orig_path)
         modify_date = self._get_modify_date(orig_path)
+
         if not exists:
             new_data = {filename: {"orig_path": orig_path, "dest_path": dest_path, "modify_date": modify_date}}
             self.data.update(new_data)
+            data = self.data
             with open(self.filepath, "w") as outfile:
-                json.dump(self.data, outfile, indent=2)
+                json.dump(data, outfile, indent=2)
         return None
 
     @staticmethod
@@ -53,7 +54,7 @@ class JsonParser:
         return filename
 
     def _check_existance(self, new_path) -> bool:
-        exists: bool = False  # FIXME error when file does not exist
+        exists: bool = False
         for fn in self.data.values():
             for path in fn.keys():
                 if path == new_path:
@@ -76,8 +77,7 @@ class JsonParser:
 
     def get_filedata(self) -> list[File]:
         fileobjs: list[File] = []
-        data = self.__get_data()
-        for item in data.items():
+        for item in self.data.items():
             filename = item[0]
             orig_path = item[1]["orig_path"]
             dest_path = item[1]["dest_path"]
