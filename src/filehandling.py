@@ -4,8 +4,6 @@ import os
 
 from file_dataclass import File
 
-# FIXME error when split-safe folder does not exist
-
 
 class Filehandler:
     fileobjs: list[File]

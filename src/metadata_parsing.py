@@ -17,7 +17,7 @@ from file_dataclass import File
 
 class JsonParser:
     filepath: str = "./file_metadata.json"
-    split_dest_path: str = "/split-safe/"
+    split_dest_path: str = "/split-safe"
     data = dict
 
     def __init__(self):
@@ -36,7 +36,7 @@ class JsonParser:
         return json_data
 
     def add_path_data(self, orig_path: str, dest_path: str) -> None:
-        filename = self._get_path_filename(orig_path)
+        filename = orig_path.split("/")[-1]
         exists = self._check_existance(orig_path)
         modify_date = self._get_modify_date(orig_path)
 
@@ -47,11 +47,6 @@ class JsonParser:
             with open(self.filepath, "w") as outfile:
                 json.dump(data, outfile, indent=2)
         return None
-
-    @staticmethod
-    def _get_path_filename(path: str) -> str:
-        filename = path.split("/")[-1]
-        return filename
 
     def _check_existance(self, new_path) -> bool:
         exists: bool = False
