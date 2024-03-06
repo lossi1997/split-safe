@@ -19,10 +19,8 @@ class Main:
 
     def __conf_parsers(self) -> None:
         for cmd, config in const.SUBCOMMANDS.items():
-            subparser = self.subparsers.add_parser(cmd, help=config["help"])
+            subparser = self.subparsers.add_parser(cmd, **config["kwargs"])
             subparser.set_defaults(func=config["func"])
-            if "args" in config or "kwargs" in config:
-                subparser.add_argument(*config["args"], **config["kwargs"])
         return None
 
 
