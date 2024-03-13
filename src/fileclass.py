@@ -29,7 +29,7 @@ class File:
     def _create_new(self):
         self.name = self.orig_path.split("/")[-1]
         self.dest_path = self._get_dest_path()
-        self.modify_date = self._get_modify_date()
+        self.modify_date = self.get_modify_date()
 
     def _get_dest_path(self) -> str:
         ch = ConfigHandler()
@@ -40,7 +40,7 @@ class File:
         new_dest = new_drive + "/split-safe"
         return new_dest
 
-    def _get_modify_date(self) -> str:
+    def get_modify_date(self) -> str:
         unix_m_date = os.path.getmtime(self.orig_path)
         formatted_m_date = time.strftime("%d.%m.%Y", time.localtime(unix_m_date))
         formatted_m_date = str(formatted_m_date)

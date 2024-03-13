@@ -48,9 +48,10 @@ class JsonParser:
                 }
                 self.filedata.update(new_data)
                 data = self.filedata
-                with open(self.filepath, "w") as outfile:
-                    json.dump(data, outfile, indent=2)
+                with open(self.filepath, "w") as f:
+                    json.dump(data, f, indent=2)
                 print(f"File: '{file.name}' successfully saved.")
+        return None
 
     def _check_existance(self, file) -> bool:
         exists: bool = False
@@ -59,3 +60,15 @@ class JsonParser:
                 if path == file.orig_path:
                     exists = True
         return exists
+
+    def update_file_modify_dates(self, files: list[File]) -> None:
+        changes = False
+        for file in files:
+            modify_date = file.get_modify_date()
+            if modify_date != self.filedata[file.name]["modify_date"]:
+                self.filedata[file.name]["modify_date"] = modify_date
+                changes = True
+        if changes:
+            with open(self.filepath, "w") as f:
+                json.dump(self.filedata, f, indent=2)
+        return None

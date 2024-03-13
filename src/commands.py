@@ -33,5 +33,6 @@ def save(args):
     fileobjs: list[File] = []
     for name, values in json_parser.filedata.items():
         fileobjs.append(File(values["orig_path"], name, values["dest_path"], values["modify_date"]))
+    json_parser.update_file_modify_dates(fileobjs)
     fh = Filehandler(fileobjs)
     fh.backup()
