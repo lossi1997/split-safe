@@ -4,7 +4,7 @@ import os
 
 
 class ConfigHandler(configparser.ConfigParser):
-    filepath: str = "../config.ini"
+    filepath: str = "./config.ini"
     active_drives: list[str]
     settings: dict = {
         "GENERAL": {
@@ -18,9 +18,7 @@ class ConfigHandler(configparser.ConfigParser):
         super().__init__(*args, **kwargs)
         if os.path.exists(self.filepath):
             self.settings = self.__get_data()
-        else:
-            self.__create_file()
-        self.active_drives = self.__get_active_drives()
+            self.active_drives = self.__get_active_drives()
 
     def __get_data(self) -> dict:
         self.read(self.filepath)
@@ -39,13 +37,15 @@ class ConfigHandler(configparser.ConfigParser):
                 self.settings["ACTIVE_DRIVES"][chr(i)] = True
         return None
 
-    def __create_file(self) -> None:
-        self.__get_existing_drives()
-        for section, value in self.settings.items():
-            self[section] = value
-        with open(self.filepath, "w") as configfile:
-            self.write(configfile)
-        return None
+    def create_file(self) -> bool:
+        file_exists = os.path.exists(self.filepath)
+        if not file_exists:
+            self.__get_existing_drives()
+            for section, value in self.settings.items():
+                self[section] = value
+            with open(self.filepath, "w") as configfile:
+                self.write(configfile)
+        return file_exists
 
     def __get_active_drives(self) -> list[str]:
         active_drives: list[str] = []

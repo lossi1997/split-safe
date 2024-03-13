@@ -21,18 +21,21 @@ class JsonParser:
     filedata = dict
 
     def __init__(self):
-        self.filedata = self.__init__data()
-
-    def __init__data(self) -> dict:
         if os.path.exists(self.filepath):
-            with open(self.filepath) as f:
-                json_data = json.load(f)
-        else:
+            self.filedata = self.__get__data()
+
+    def __get__data(self) -> dict:
+        with open(self.filepath) as f:
+            json_data = json.load(f)
+        return json_data
+
+    def create_file(self) -> bool:
+        file_exists = os.path.exists(self.filepath)
+        if not file_exists:
             with open(self.filepath, "w") as f:
                 default = json.dumps({})
                 f.write(default)
-                json_data = default
-        return json_data
+        return file_exists
 
     def dump_new_files(self, fileobjs) -> None:
         for file in fileobjs:

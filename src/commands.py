@@ -8,8 +8,10 @@ from fileclass import File
 
 
 def init(args):
-    ConfigHandler()
-    JsonParser()
+    ch = ConfigHandler()
+    ch.create_file()
+    jp = JsonParser()
+    jp.create_file()
 
 
 def add(args):
@@ -24,15 +26,15 @@ def add(args):
                 fileobjs.append(File(path, new=True))
             else:
                 print("Invalid path!")
-    json_parser = JsonParser()
-    json_parser.dump_new_files(fileobjs)
+    jp = JsonParser()
+    jp.dump_new_files(fileobjs)
 
 
 def save(args):
-    json_parser = JsonParser()
+    jp = JsonParser()
     fileobjs: list[File] = []
-    for name, values in json_parser.filedata.items():
+    for name, values in jp.filedata.items():
         fileobjs.append(File(values["orig_path"], name, values["dest_path"], values["modify_date"]))
-    json_parser.update_file_modify_dates(fileobjs)
+    jp.update_file_modify_dates(fileobjs)
     fh = Filehandler(fileobjs)
     fh.backup()
