@@ -4,7 +4,7 @@ import os
 from configure import ConfigHandler
 from filehandling import Filehandler
 from metadata_parsing import JsonParser
-
+from file import File
 
 def init(args):
     ConfigHandler()
@@ -12,10 +12,8 @@ def init(args):
 
 
 def add(args):
-    conf = ConfigHandler()
-    print(conf.active_drives)
-    print(conf.settings)
-    paths: list[str] = []
+    json_parser = JsonParser()
+    fileobjs: list[File] = []
     while True:
         path: str = input("Insert path, enter to continue adding. Empty input breaks: ")
         if path == "":
@@ -23,14 +21,10 @@ def add(args):
         else:
             path = path.replace("\\", "/")
             if os.path.exists(path):
-                paths.append(path)
+                fileobjs.append(File(path))
             else:
                 print("Invalid path!")
-
-    json_parser = JsonParser()
-    for path in paths:
-        dest_path = json_parser.set_dest_filepath(path, conf.active_drives)
-        json_parser.add_path_data(path, dest_path)
+    json_parser.dump_new_files(fileobjs)
 
 
 def save(args):

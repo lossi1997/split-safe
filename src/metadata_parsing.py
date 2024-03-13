@@ -3,7 +3,7 @@ import json
 import os
 import time
 
-from file_dataclass import File
+from file import File
 
 # json file structure:
 # {
@@ -18,10 +18,10 @@ from file_dataclass import File
 class JsonParser:
     filepath: str = "./file_metadata.json"
     split_dest_path: str = "/split-safe"
-    data = dict
+    filedata = dict
 
     def __init__(self):
-        self.data = self.__init__data()
+        self.filedata = self.__init__data()
 
     def __init__data(self) -> dict:
         if os.path.exists(self.filepath):
@@ -32,52 +32,80 @@ class JsonParser:
                 default = json.dumps({})
                 f.write(default)
                 json_data = default
-
         return json_data
 
-    def add_path_data(self, orig_path: str, dest_path: str) -> None:
-        filename = orig_path.split("/")[-1]
-        exists = self._check_existance(orig_path)
-        modify_date = self._get_modify_date(orig_path)
+    def dump_new_files(self, fileobjs) -> None:
+        for file in fileobjs:
+            if self._check_existance(file) is True:
+                print(f"File: '{file.name}' already saved.")
+            else:
+                new_data = {
+                    file.name: {
+                        "orig_path": file.orig_path,
+                        "dest_path": file.dest_path,
+                        "modify_date": file.modify_date
+                    }
+                }
+                self.filedata.update(new_data)
+                data = self.filedata
+                with open(self.filepath, "w") as outfile:
+                    json.dump(data, outfile, indent=2)
+                print(f"File: '{file.name}' successfully saved.")
 
-        if not exists:
-            new_data = {filename: {"orig_path": orig_path, "dest_path": dest_path, "modify_date": modify_date}}
-            self.data.update(new_data)
-            data = self.data
-            with open(self.filepath, "w") as outfile:
-                json.dump(data, outfile, indent=2)
-        return None
-
-    def _check_existance(self, new_path) -> bool:
+    def _check_existance(self, file) -> bool:
         exists: bool = False
-        for fn in self.data.values():
+        for fn in self.filedata.values():
             for path in fn.keys():
-                if path == new_path:
+                if path == file.orig_path:
                     exists = True
         return exists
 
-    @staticmethod
-    def _get_modify_date(path) -> str:
-        unix_m_date = os.path.getmtime(path)
-        formatted_m_date = time.strftime("%d.%m.%Y", time.localtime(unix_m_date))
-        formatted_m_date = str(formatted_m_date)
-        return formatted_m_date
 
-    def set_dest_filepath(self, orig_path, active_drives) -> str:
-        new_dest: str
-        drive = orig_path.split("/")[0]
-        new_drive = active_drives[(active_drives.index(drive) + 1) % len(active_drives)]
-        new_dest = new_drive + self.split_dest_path
-        return new_dest
 
-    def get_filedata(self) -> list[File]:
-        fileobjs: list[File] = []
-        for item in self.data.items():
-            filename = item[0]
-            orig_path = item[1]["orig_path"]
-            dest_path = item[1]["dest_path"]
-            unix_m_date = os.path.getmtime(item[1]["orig_path"])
-            formatted_m_date = time.strftime("%d.%m.%Y", time.localtime(unix_m_date))
-            file_obj = File(filename, orig_path, dest_path, formatted_m_date)
-            fileobjs.append(file_obj)
-        return fileobjs
+
+    # def add_path_data(self, orig_path: str, dest_path: str) -> None:
+    #     filename = orig_path.split("/")[-1]
+    #     exists = self._check_existance(orig_path)
+    #     modify_date = self._get_modify_date(orig_path)
+    #
+    #     if not exists:
+    #         new_data = {filename: {"orig_path": orig_path, "dest_path": dest_path, "modify_date": modify_date}}
+    #         self.data.update(new_data)
+    #         data = self.data
+    #         with open(self.filepath, "w") as outfile:
+    #             json.dump(data, outfile, indent=2)
+    #     return None
+    #
+    # def _check_existance(self, new_path) -> bool:
+    #     exists: bool = False
+    #     for fn in self.data.values():
+    #         for path in fn.keys():
+    #             if path == new_path:
+    #                 exists = True
+    #     return exists
+    #
+    # @staticmethod
+    # def _get_modify_date(path) -> str:
+    #     unix_m_date = os.path.getmtime(path)
+    #     formatted_m_date = time.strftime("%d.%m.%Y", time.localtime(unix_m_date))
+    #     formatted_m_date = str(formatted_m_date)
+    #     return formatted_m_date
+    #
+    # def set_dest_filepath(self, orig_path, active_drives) -> str:
+    #     new_dest: str
+    #     drive = orig_path.split("/")[0]
+    #     new_drive = active_drives[(active_drives.index(drive) + 1) % len(active_drives)]
+    #     new_dest = new_drive + self.split_dest_path
+    #     return new_dest
+    #
+    # def get_filedata(self) -> list[File]:
+    #     fileobjs: list[File] = []
+    #     for item in self.data.items():
+    #         filename = item[0]
+    #         orig_path = item[1]["orig_path"]
+    #         dest_path = item[1]["dest_path"]
+    #         unix_m_date = os.path.getmtime(item[1]["orig_path"])
+    #         formatted_m_date = time.strftime("%d.%m.%Y", time.localtime(unix_m_date))
+    #         file_obj = File(filename, orig_path, dest_path, formatted_m_date)
+    #         fileobjs.append(file_obj)
+    #     return fileobjs

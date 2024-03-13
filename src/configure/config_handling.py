@@ -16,12 +16,10 @@ class ConfigHandler(configparser.ConfigParser):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         if os.path.exists(self.filepath):
             self.settings = self.__get_data()
         else:
             self.__create_file()
-
         self.active_drives = self.__get_active_drives()
 
     def __get_data(self) -> dict:
@@ -52,7 +50,6 @@ class ConfigHandler(configparser.ConfigParser):
     def __get_active_drives(self) -> list[str]:
         active_drives: list[str] = []
         for drive, active in self.settings["ACTIVE_DRIVES"].items():
-            print(drive, active)
             if active:
                 active_drives.append(drive.upper() + ":")
         return active_drives
