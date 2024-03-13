@@ -11,8 +11,22 @@ class File:
     dest_path: str
     modify_date: str
 
-    def __init__(self, orig_path: str):
+    def __init__(self,
+                 orig_path: str,
+                 name: str | None = None,
+                 dest_path: str | None = None,
+                 modify_date: str | None = None,
+                 new: bool = False
+                 ):
         self.orig_path = orig_path
+        if new:
+            self._create_new()
+        else:
+            self.name = name
+            self.dest_path = dest_path
+            self.modify_date = modify_date
+
+    def _create_new(self):
         self.name = self.orig_path.split("/")[-1]
         self.dest_path = self._get_dest_path()
         self.modify_date = self._get_modify_date()

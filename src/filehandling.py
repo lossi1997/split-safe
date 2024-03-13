@@ -2,7 +2,7 @@
 import shutil
 import os
 
-from file import File
+from fileclass import File
 
 
 class Filehandler:

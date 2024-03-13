@@ -4,7 +4,7 @@ import os
 
 
 class ConfigHandler(configparser.ConfigParser):
-    filepath: str = "./config.ini"
+    filepath: str = "../config.ini"
     active_drives: list[str]
     settings: dict = {
         "GENERAL": {
