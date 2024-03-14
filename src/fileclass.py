@@ -7,18 +7,21 @@ from configure import ConfigHandler
 
 class File:
     orig_path: str
-    name: str
-    dest_path: str
-    modify_date: str
+    name: str | None
+    dest_path: str | None
+    modify_date: str | None
+    save_date: str | None
 
     def __init__(self,
                  orig_path: str,
                  name: str | None = None,
                  dest_path: str | None = None,
                  modify_date: str | None = None,
+                 save_date: str | None = None,
                  new: bool = False
                  ):
         self.orig_path = orig_path
+        self.save_date = save_date
         if new:
             self._create_new()
         else:

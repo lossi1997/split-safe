@@ -38,3 +38,4 @@ def save(args):
     jp.update_file_modify_dates(fileobjs)
     fh = Filehandler(fileobjs)
     fh.backup()
+    jp.update_file_save_dates(fileobjs)

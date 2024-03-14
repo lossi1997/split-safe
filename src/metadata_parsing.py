@@ -10,7 +10,8 @@ from fileclass import File
 #   "<filename>": {
 #     "orig_path": "<path>",
 #     "dest_path": "<path>",
-#     "modify_date": "<dd.mm.yyyy>"
+#     "modify_date": "<dd.mm.yyyy>",
+#     "save_date": "<dd.mm.yyyy>"
 #   }
 # }
 
@@ -46,7 +47,8 @@ class JsonParser:
                     file.name: {
                         "orig_path": file.orig_path,
                         "dest_path": file.dest_path,
-                        "modify_date": file.modify_date
+                        "modify_date": file.modify_date,
+                        "save_date": ""
                     }
                 }
                 self.filedata.update(new_data)
@@ -70,8 +72,17 @@ class JsonParser:
             modify_date = file.get_modify_date()
             if modify_date != self.filedata[file.name]["modify_date"]:
                 self.filedata[file.name]["modify_date"] = modify_date
+                file.modify_date = modify_date
                 changes = True
         if changes:
             with open(self.filepath, "w") as f:
                 json.dump(self.filedata, f, indent=2)
         return None
+
+    def update_file_save_dates(self, files: list[File]) -> None:
+        for file in files:
+            formatted_m_date = time.strftime("%d.%m.%Y", time.localtime())
+            self.filedata[file.name]["save_date"] = formatted_m_date
+            file.save_date = formatted_m_date
+        with open(self.filepath, "w") as f:
+            json.dump(self.filedata, f, indent=2)
